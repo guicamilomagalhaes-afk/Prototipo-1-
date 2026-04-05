@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Checkout Seguro | Artools</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Iconify -->
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+
+    <!-- GSAP para Animação de Entrada -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        stone: {
+                            50: '#fafaf9', 100: '#f5f5f4', 200: '#e7e5e4', 300: '#d6d3d1',
+                            400: '#a8a29e', 500: '#78716c', 800: '#292524', 900: '#1c1917',
+                        },
+                        surface: '#EAEAE5',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { 
+            background: #EAEAE5; 
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Inputs Premium Style */
+        .input-premium {
+            width: 100%;
+            background: transparent;
+            border-bottom: 1px solid #d6d3d1; /* stone-300 */
+            padding: 12px 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            color: #1c1917;
+            outline: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .input-premium:focus {
+            border-bottom-color: #1c1917; /* stone-900 */
+        }
+        .input-premium::placeholder {
+            color: #a8a29e; /* stone-400 */
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Ambient glow setup */
+        .ambient-glow {
+            position: absolute;
+            width: 40vw;
+            height: 40vw;
+            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 70%);
+            filter: blur(80px);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.6;
+        }
+
+        .btn-beam {
+            position: relative;
+            z-index: 10;
+            overflow: hidden;
+            border-radius: 999px;
+            padding: 2px;
+            background-color: #1c1917;
+            display: inline-flex;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .btn-beam:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -10px rgba(0,0,0,0.5);
+        }
+        .btn-beam-content {
+            background-color: #1c1917;
+            color: #fff;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: inherit;
+            width: 100%;
+            padding: 16px 32px;
+            transition: all 0.3s;
+        }
+        .btn-beam:hover .btn-beam-content {
+            background-color: #fff;
+            color: #1c1917;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body class="selection:bg-stone-900 selection:text-white text-stone-900 min-h-screen flex flex-col relative">
+
+    <div class="ambient-glow top-0 left-0 -translate-x-1/4 -translate-y-1/4"></div>
+
+    <!-- Minimal Header -->
+    <header class="w-full px-6 md:px-12 py-6 flex justify-between items-center border-b border-stone-300/50 relative z-20">
+        <a href="index.html" class="font-display font-bold text-stone-900 tracking-tighter text-2xl hover:opacity-70 transition-opacity">ARTOOLS.</a>
+        <div class="flex items-center gap-2 font-mono text-[10px] sm:text-xs uppercase tracking-widest text-stone-500">
+            <iconify-icon icon="solar:lock-password-linear" class="text-stone-900 text-lg"></iconify-icon>
+            Checkout Seguro
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-[1440px] mx-auto w-full px-6 md:px-12 py-12 lg:py-20 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 relative z-10">
+        
+        <!-- Left Column: Checkout Forms (LG: 7 cols) -->
+        <div class="lg:col-span-7 flex flex-col gap-16 gs-reveal">
+            
+            <!-- Breadcrumbs -->
+            <nav class="font-mono text-[10px] uppercase font-bold tracking-[0.2em] text-stone-400 flex gap-2 items-center">
+                <a href="cart.html" class="hover:text-stone-900 transition-colors">Carrinho</a>
+                <span>/</span>
+                <span class="text-stone-900">Informações</span>
+                <span>/</span>
+                <span>Pagamento</span>
+            </nav>
+
+            <!-- 1. Contato -->
+            <section class="flex flex-col gap-6">
+                <div class="flex justify-between items-baseline mb-2">
+                    <h2 class="font-display text-3xl font-bold tracking-tight">Contato</h2>
+                    <span class="font-sans text-xs text-stone-500">Já possui conta? <a href="#" class="text-stone-900 underline font-medium">Log in</a></span>
+                </div>
+                <div class="grid grid-cols-1 gap-6">
+                    <input type="email" placeholder="Email Exclusivo" class="input-premium" />
+                    <label class="flex items-center gap-3 cursor-pointer mt-2 w-max">
+                        <input type="checkbox" checked class="w-4 h-4 accent-stone-900 rounded-sm cursor-pointer" />
+                        <span class="font-sans text-[13px] text-stone-600">Ter acesso em primeira mão em novos lançamentos e benefícios VIP.</span>
+                    </label>
+                </div>
+            </section>
+
+            <!-- 2. Entrega -->
+            <section class="flex flex-col gap-6">
+                <h2 class="font-display text-3xl font-bold tracking-tight mb-2">Entrega</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <input type="text" placeholder="Nome" class="input-premium" />
+                    <input type="text" placeholder="Sobrenome" class="input-premium" />
+                    <input type="text" id="cep" placeholder="CEP" class="input-premium md:col-span-2" maxlength="9" />
+                    <input type="text" id="logradouro" placeholder="Endereço" class="input-premium md:col-span-2" />
+                    <input type="text" id="bairro" placeholder="Bairro" class="input-premium" />
+                    <input type="text" id="numero" placeholder="Número / Complemento" class="input-premium" />
+                    <input type="text" id="cidade" placeholder="Cidade" class="input-premium" />
+                    <select id="uf" class="input-premium bg-transparent text-stone-500 appearance-none cursor-pointer">
+                        <option value="" disabled selected>ESTADO / UF</option>
+                        <option value="AC">Acre</option>
+                        <option value="AL">Alagoas</option>
+                        <option value="AP">Amapá</option>
+                        <option value="AM">Amazonas</option>
+                        <option value="BA">Bahia</option>
+                        <option value="CE">Ceará</option>
+                        <option value="DF">Distrito Federal</option>
+                        <option value="ES">Espírito Santo</option>
+                        <option value="GO">Goiás</option>
+                        <option value="MA">Maranhão</option>
+                        <option value="MT">Mato Grosso</option>
+                        <option value="MS">Mato Grosso do Sul</option>
+                        <option value="MG">Minas Gerais</option>
+                        <option value="PA">Pará</option>
+                        <option value="PB">Paraíba</option>
+                        <option value="PR">Paraná</option>
+                        <option value="PE">Pernambuco</option>
+                        <option value="PI">Piauí</option>
+                        <option value="RJ">Rio de Janeiro</option>
+                        <option value="RN">Rio Grande do Norte</option>
+                        <option value="RS">Rio Grande do Sul</option>
+                        <option value="RO">Rondônia</option>
+                        <option value="RR">Roraima</option>
+                        <option value="SC">Santa Catarina</option>
+                        <option value="SP">São Paulo</option>
+                        <option value="SE">Sergipe</option>
+                        <option value="TO">Tocantins</option>
+                    </select>
+                </div>
+            </section>
+
+            <!-- 3. Pagamento -->
+            <section class="flex flex-col gap-6">
+                <div class="flex flex-col mb-2">
+                    <h2 class="font-display text-3xl font-bold tracking-tight">Pagamento</h2>
+                    <span class="font-mono text-[10px] text-stone-500 uppercase tracking-widest mt-1">Todas as transações são encriptadas (256-bit).</span>
+                </div>
+
+                <!-- Payment Selection Box -->
+                <div class="bg-white border border-stone-200 rounded-[16px] overflow-hidden shadow-sm">
+                    
+                    <!-- Credit Card Option (Selected) -->
+                    <label class="flex items-center p-5 border-b border-stone-100 cursor-pointer bg-stone-50/50">
+                        <input type="radio" name="payment" checked class="w-4 h-4 accent-stone-900 mr-4" />
+                        <span class="font-sans font-medium text-sm">Cartão de Crédito</span>
+                        <div class="ml-auto flex gap-2">
+                            <iconify-icon icon="logos:visa" class="text-xl"></iconify-icon>
+                            <iconify-icon icon="logos:mastercard" class="text-xl"></iconify-icon>
+                        </div>
+                    </label>
+
+                    <!-- Credit Card Fields Dropdown -->
+                    <div class="p-6 bg-stone-50 border-b border-stone-100 flex flex-col gap-4">
+                        <input type="text" placeholder="Número do Cartão" class="w-full bg-white border border-stone-200 rounded-md p-3 font-mono text-[13px] outline-none focus:border-stone-500 transition-colors" />
+                        <div class="grid grid-cols-2 gap-4">
+                            <input type="text" placeholder="Validade (MM/AA)" class="w-full bg-white border border-stone-200 rounded-md p-3 font-mono text-[13px] outline-none focus:border-stone-500 transition-colors" />
+                            <input type="text" placeholder="CVC" class="w-full bg-white border border-stone-200 rounded-md p-3 font-mono text-[13px] outline-none focus:border-stone-500 transition-colors" />
+                        </div>
+                        <input type="text" placeholder="Nome impresso no cartão" class="w-full bg-white border border-stone-200 rounded-md p-3 font-mono text-[13px] outline-none focus:border-stone-500 transition-colors" />
+                    </div>
+
+                    <!-- PIX Option -->
+                    <label class="flex items-center p-5 border-b border-stone-100 cursor-pointer hover:bg-stone-50 transition-colors">
+                        <input type="radio" name="payment" class="w-4 h-4 accent-stone-900 mr-4" />
+                        <span class="font-sans font-medium text-sm">PIX - Aprovação Instantânea</span>
+                        <iconify-icon icon="ic:baseline-pix" class="ml-auto text-2xl text-[#32BCA4]"></iconify-icon>
+                    </label>
+
+                    <!-- Mercado Pago Option -->
+                    <label class="flex items-center p-5 cursor-pointer hover:bg-stone-50 transition-colors">
+                        <input type="radio" name="payment" class="w-4 h-4 accent-stone-900 mr-4" />
+                        <span class="font-sans font-medium text-sm">Mercado Pago (Carteira ou Parcelamento)</span>
+                        <iconify-icon icon="logos:mercadopago" class="ml-auto text-lg h-5"></iconify-icon>
+                    </label>
+                </div>
+            </section>
+            
+        </div>
+
+        <!-- Right Column: Cart Summary (LG: 5 cols) -->
+        <div class="lg:col-span-5 w-full gs-reveal gs-delay">
+            <!-- Glassmorphism Card Effect -->
+            <div class="bg-white/60 backdrop-blur-3xl rounded-[32px] p-8 lg:p-10 xl:p-12 border border-white shadow-[0_40px_80px_-20px_rgba(28,25,23,0.08)] sticky top-12">
+                
+                <h2 class="font-display text-2xl font-bold tracking-tight mb-8">Resumo da Aquisição</h2>
+                
+                <!-- Product List -->
+                <div class="flex flex-col gap-6 border-b border-stone-200/50 pb-8 mb-8">
+                    <!-- Item 1 -->
+                    <div class="flex gap-6 items-center group">
+                        <!-- Product Image -->
+                        <div class="w-20 h-20 bg-[#f4f4f5] rounded-[16px] flex flex-shrink-0 items-center justify-center p-2 relative overflow-hidden border border-white shadow-inner">
+                            <span class="absolute -top-2 -right-2 bg-stone-900 text-white w-6 h-6 flex justify-center items-center rounded-full text-[10px] font-mono font-bold z-20 translate-y-1/2 -translate-x-1/2">1</span>
+                            <img src="assets/IMG/tech_glasses.png" class="w-full object-cover mix-blend-multiply transition-transform duration-500 group-hover:scale-110" alt="Aura Series" />
+                        </div>
+                        <!-- Product Details -->
+                        <div class="flex-1 flex flex-col pt-1">
+                            <h3 class="font-display font-bold text-lg leading-none uppercase tracking-tighter text-black">Aura Series Tech</h3>
+                            <p class="font-mono text-[9px] text-stone-500 uppercase tracking-[0.2em] mt-1 mb-2">Edição de Lançamento</p>
+                            <span class="font-mono font-medium text-sm">R$ 2.450,00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Cupom -->
+                <div class="flex gap-3 mb-8">
+                    <input type="text" placeholder="Código Convite (Gift Card)" class="flex-1 bg-white/50 border border-stone-200/50 rounded-lg px-4 font-mono text-xs uppercase outline-none focus:border-stone-900 transition-colors" />
+                    <button class="bg-stone-200 hover:bg-stone-300 text-stone-900 px-6 py-3 rounded-lg font-mono text-[10px] font-bold uppercase tracking-widest transition-colors">
+                        Aplicar
+                    </button>
+                </div>
+
+                <!-- Totals Calculation -->
+                <div class="flex flex-col gap-4 font-sans text-sm text-stone-600 border-b border-stone-200/50 pb-8 mb-8 font-medium">
+                    <div class="flex justify-between items-center">
+                        <span>Subtotal</span>
+                        <span class="font-mono text-stone-900">R$ 2.450,00</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span>Frete Internacional Expresso</span>
+                        <span class="font-mono text-stone-900">Calculando...</span>
+                    </div>
+                </div>
+
+                <!-- Grand Total -->
+                <div class="flex justify-between items-end mb-10">
+                    <span class="font-display text-lg font-bold">Total</span>
+                    <div class="flex flex-col items-end">
+                        <span class="font-mono text-[10px] text-stone-400 uppercase tracking-widest mb-1">BRL</span>
+                        <span class="font-display text-4xl lg:text-5xl font-bold tracking-tighter text-black">R$ 2.450,00</span>
+                    </div>
+                </div>
+
+                <!-- Finalize Button -->
+                <button class="btn-beam w-full group">
+                    <span class="btn-beam-content gap-3 w-full">
+                        <iconify-icon icon="solar:lock-bold" class="text-lg opacity-50 group-hover:opacity-100 transition-opacity"></iconify-icon>
+                        <span class="font-mono font-bold text-xs uppercase tracking-[0.15em] shrink-0">Confirmar Pagamento</span>
+                    </span>
+                </button>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Script GSAP Entry Animations -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Animação muito leve e requintada para revelar os elementos quando a página carrega
+            gsap.fromTo(".gs-reveal", 
+                { y: 40, opacity: 0 }, 
+                { y: 0, opacity: 1, duration: 1.2, ease: "power4.out", stagger: 0.15 }
+            );
+            
+            gsap.fromTo(".gs-delay", 
+                { y: 50, opacity: 0 }, 
+                { y: 0, opacity: 1, duration: 1.4, ease: "power4.out", delay: 0.3 }
+            );
+
+            // Lógica de busca de CEP
+            const cepInput = document.getElementById('cep');
+            const logradouroInput = document.getElementById('logradouro');
+            const bairroInput = document.getElementById('bairro');
+            const cidadeInput = document.getElementById('cidade');
+            const ufSelect = document.getElementById('uf');
+
+            cepInput.addEventListener('blur', (e) => {
+                const cep = e.target.value.replace(/\D/g, '');
+                
+                if (cep.length === 8) {
+                    // Feedback visual de carregamento
+                    cepInput.style.opacity = '0.5';
+                    
+                    fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (!data.erro) {
+                                logradouroInput.value = data.logradouro;
+                                bairroInput.value = data.bairro;
+                                cidadeInput.value = data.localidade;
+                                ufSelect.value = data.uf;
+                                
+                                // Focar no número para facilitar
+                                document.getElementById('numero').focus();
+                                
+                                // Animação sutil de preenchimento
+                                gsap.from([logradouroInput, bairroInput, cidadeInput, ufSelect], {
+                                    backgroundColor: "rgba(28,25,23,0.1)",
+                                    duration: 0.5
+                                });
+                            }
+                        })
+                        .finally(() => {
+                            cepInput.style.opacity = '1';
+                        });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
