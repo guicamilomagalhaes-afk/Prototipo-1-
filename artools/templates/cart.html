@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Seu Carrinho | Artools</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Iconify -->
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        stone: {
+                            50: '#fafaf9', 100: '#f5f5f4', 200: '#e7e5e4', 300: '#d6d3d1',
+                            400: '#a8a29e', 500: '#78716c', 800: '#292524', 900: '#1c1917',
+                        },
+                        surface: '#EAEAE5',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { 
+            background: #EAEAE5; 
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .ambient-glow {
+            position: absolute;
+            width: 40vw;
+            height: 40vw;
+            background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, transparent 70%);
+            filter: blur(80px);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.7;
+        }
+
+        .btn-beam {
+            position: relative;
+            z-index: 10;
+            overflow: hidden;
+            border-radius: 999px;
+            padding: 2px;
+            background-color: #1c1917;
+            display: inline-flex;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .btn-beam:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -10px rgba(0,0,0,0.5);
+        }
+        .btn-beam-content {
+            background-color: #1c1917;
+            color: #fff;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: inherit;
+            width: 100%;
+            padding: 16px 32px;
+            transition: all 0.3s;
+        }
+        .btn-beam:hover .btn-beam-content {
+            background-color: #fff;
+            color: #1c1917;
+            font-weight: 700;
+        }
+
+        /* Cart specific animations */
+        .cart-item {
+            transition: all 0.4s ease;
+        }
+        .cart-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -15px rgba(28,25,23,0.1);
+        }
+    </style>
+</head>
+<body class="selection:bg-stone-900 selection:text-white text-stone-900 min-h-screen flex flex-col relative">
+
+    <div class="ambient-glow top-0 left-0 -translate-x-1/4 -translate-y-1/4"></div>
+    <div class="ambient-glow bottom-0 right-0 translate-x-1/4 translate-y-1/4"></div>
+
+    <!-- Minimal Header -->
+    <header class="w-full px-6 md:px-12 py-6 flex justify-between items-center border-b border-stone-300/50 relative z-20">
+        <a href="index.html" class="font-display font-bold text-stone-900 tracking-tighter text-2xl hover:opacity-70 transition-opacity">ARTOOLS.</a>
+        <div class="flex items-center gap-2 font-mono text-[10px] sm:text-xs uppercase tracking-widest text-stone-500">
+            <iconify-icon icon="solar:bag-3-bold" class="text-stone-900 text-lg"></iconify-icon>
+            Seu Carrinho
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-[1440px] mx-auto w-full px-6 md:px-12 py-12 lg:py-20 relative z-10">
+        
+        <div class="flex flex-col mb-12 gs-reveal">
+            <h1 class="font-display text-5xl md:text-6xl font-bold tracking-tighter text-black">ESTUDO #01</h1>
+            <p class="font-mono text-xs text-stone-500 uppercase tracking-widest mt-2">Revise sua aquisição de luxo</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24">
+            
+            <!-- Items Area (LG: 7 cols) -->
+            <div class="lg:col-span-7 flex flex-col gap-6 gs-reveal">
+                
+                <!-- Product Item 1 -->
+                <div class="cart-item flex flex-col sm:flex-row gap-6 sm:gap-8 items-start sm:items-center bg-white/70 backdrop-blur-xl p-6 rounded-[24px] border border-white shadow-sm w-full">
+                    
+                    <div class="w-full sm:w-32 h-40 sm:h-32 bg-[#EAEAE5] rounded-[16px] flex flex-shrink-0 items-center justify-center p-4 relative group cursor-pointer overflow-hidden shadow-inner">
+                        <img src="assets/IMG/tech_glasses.png" class="w-full h-full object-cover mix-blend-multiply transition-transform duration-500 group-hover:scale-110" alt="Aura Series" />
+                    </div>
+                    
+                    <div class="flex-1 flex flex-col w-full h-full justify-between">
+                        <div class="flex justify-between items-start w-full">
+                            <div>
+                                <h3 class="font-display text-2xl font-bold uppercase tracking-tighter text-black">Aura Series Tech</h3>
+                                <p class="font-mono text-[10px] text-stone-500 uppercase tracking-widest mt-1 mb-4">Edição de Lançamento</p>
+                            </div>
+                            <button class="text-stone-300 hover:text-red-500 transition-colors p-2" title="Remover">
+                                <iconify-icon icon="solar:trash-bin-trash-linear" class="text-xl"></iconify-icon>
+                            </button>
+                        </div>
+                        
+                        <div class="flex items-center justify-between mt-auto w-full">
+                            <span class="font-mono font-bold text-lg text-stone-900">R$ 2.450,00</span>
+                            
+                            <!-- Stepper Container -->
+                            <div class="flex items-center gap-4 bg-stone-100 rounded-full px-3 py-1.5 border border-stone-200">
+                                <button class="w-6 h-6 flex items-center justify-center rounded-full hover:bg-white text-stone-500 hover:text-stone-900 transition-all hover:shadow-sm"><iconify-icon icon="solar:minus-linear"></iconify-icon></button>
+                                <span class="font-mono text-xs font-bold w-4 text-center">1</span>
+                                <button class="w-6 h-6 flex items-center justify-center rounded-full hover:bg-white text-stone-500 hover:text-stone-900 transition-all hover:shadow-sm"><iconify-icon icon="solar:add-linear"></iconify-icon></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Item 2 -->
+                <div class="cart-item flex flex-col sm:flex-row gap-6 sm:gap-8 items-start sm:items-center bg-white/70 backdrop-blur-xl p-6 rounded-[24px] border border-white shadow-sm w-full">
+                    
+                    <div class="w-full sm:w-32 h-40 sm:h-32 bg-stone-100 rounded-[16px] flex flex-shrink-0 items-center justify-center p-4 relative group cursor-pointer overflow-hidden shadow-inner">
+                        <img src="assets/IMG/white_glasses.png" class="w-full h-full object-cover mix-blend-multiply transition-transform duration-500 group-hover:scale-110" alt="Pure White" />
+                    </div>
+                    
+                    <div class="flex-1 flex flex-col w-full h-full justify-between">
+                        <div class="flex justify-between items-start w-full">
+                            <div>
+                                <h3 class="font-display text-2xl font-bold uppercase tracking-tighter text-black">Pure White</h3>
+                                <p class="font-mono text-[10px] text-stone-500 uppercase tracking-widest mt-1 mb-4">Acetato Premium</p>
+                            </div>
+                            <button class="text-stone-300 hover:text-red-500 transition-colors p-2" title="Remover">
+                                <iconify-icon icon="solar:trash-bin-trash-linear" class="text-xl"></iconify-icon>
+                            </button>
+                        </div>
+                        
+                        <div class="flex items-center justify-between mt-auto w-full">
+                            <span class="font-mono font-bold text-lg text-stone-900">R$ 1.850,00</span>
+                            
+                            <!-- Stepper Container -->
+                            <div class="flex items-center gap-4 bg-stone-100 rounded-full px-3 py-1.5 border border-stone-200">
+                                <button class="w-6 h-6 flex items-center justify-center rounded-full hover:bg-white text-stone-500 hover:text-stone-900 transition-all hover:shadow-sm"><iconify-icon icon="solar:minus-linear"></iconify-icon></button>
+                                <span class="font-mono text-xs font-bold w-4 text-center">1</span>
+                                <button class="w-6 h-6 flex items-center justify-center rounded-full hover:bg-white text-stone-500 hover:text-stone-900 transition-all hover:shadow-sm"><iconify-icon icon="solar:add-linear"></iconify-icon></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Summary Area (LG: 5 cols) -->
+            <div class="lg:col-span-5 w-full gs-reveal gs-delay">
+                
+                <div class="bg-white/60 backdrop-blur-3xl rounded-[32px] p-8 lg:p-10 border border-white shadow-[0_40px_80px_-20px_rgba(28,25,23,0.08)] sticky top-12">
+                    
+                    <h2 class="font-display text-2xl font-bold tracking-tight mb-8">Resumo</h2>
+                    
+                    <div class="flex flex-col gap-4 font-sans text-sm text-stone-600 mb-8 font-medium">
+                        <div class="flex justify-between items-center">
+                            <span>Subtotal</span>
+                            <span class="font-mono text-stone-900">R$ 4.300,00</span>
+                        </div>
+                        <div class="flex justify-between items-center opacity-50">
+                            <span>Frete e Entrega</span>
+                            <span class="font-mono text-stone-900 text-xs uppercase tracking-widest">Calculado no Checkout</span>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-stone-200/50 pt-8 mb-10 flex justify-between items-end">
+                        <span class="font-display text-lg font-bold">Total Estimado</span>
+                        <div class="flex flex-col items-end">
+                            <span class="font-mono text-[10px] text-stone-400 uppercase tracking-widest mb-1">BRL</span>
+                            <span class="font-display text-4xl font-bold tracking-tighter text-black">R$ 4.300,00</span>
+                        </div>
+                    </div>
+                    
+                    <a href="checkout.html" class="btn-beam w-full group text-center flex">
+                        <span class="btn-beam-content gap-3 w-full justify-center">
+                            <span class="font-mono font-bold text-xs uppercase tracking-[0.15em] shrink-0">Continuar para Checkout</span>
+                            <iconify-icon icon="solar:arrow-right-linear" class="text-lg opacity-50 group-hover:opacity-100 transition-opacity"></iconify-icon>
+                        </span>
+                    </a>
+
+                    <div class="mt-6 flex justify-center items-center gap-2 text-stone-400">
+                        <iconify-icon icon="solar:shield-check-linear" class="text-lg"></iconify-icon>
+                        <span class="font-mono text-[9px] uppercase tracking-widest">Compra 100% Segura</span>
+                    </div>
+
+                </div>
+            </div>
+            
+        </div>
+    </main>
+
+    <!-- Script GSAP Entry Animations -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            gsap.fromTo(".gs-reveal", 
+                { y: 30, opacity: 0 }, 
+                { y: 0, opacity: 1, duration: 1.2, ease: "power4.out", stagger: 0.1 }
+            );
+            
+            gsap.fromTo(".gs-delay", 
+                { y: 40, opacity: 0 }, 
+                { y: 0, opacity: 1, duration: 1.4, ease: "power4.out", delay: 0.2 }
+            );
+        });
+    </script>
+</body>
+</html>

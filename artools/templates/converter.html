@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <title>Conversor de Vídeo para Image Sequence (Fix para Scroll)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <style>
+        body { background: #fafaf9; font-family: sans-serif; }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-8 text-stone-900">
+    <div class="max-w-xl w-full bg-white p-8 rounded-2xl shadow-sm border border-stone-200">
+        <h1 class="text-2xl font-bold mb-2">Motor de Renderização 3D</h1>
+        <p class="text-sm text-stone-500 mb-6">
+            Como você está rodando o site localmente (sem servidor web), navegadores bloqueiam manipulações complexas de vídeo. 
+            Para ter a fluidez perfeita (Padrão Apple - 60fps), vamos extrair todos os quadros do vídeo e transformá-los numa sequência de imagens (.webp).
+        </p>
+
+        <div class="mb-6">
+            <label class="block text-sm font-medium mb-2">1. Selecione o vídeo (Glasses_rotating_on_202604042011.mp4)</label>
+            <input type="file" id="video-input" accept="video/mp4" class="block w-full text-sm text-stone-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-stone-900 file:text-white hover:file:bg-stone-800"/>
+        </div>
+
+        <button id="process-btn" disabled class="w-full bg-stone-300 text-stone-500 py-3 rounded-xl font-medium transition-colors">
+            Processar e Baixar .ZIP
+        </button>
+
+        <div id="status" class="mt-4 text-sm text-stone-600 font-mono hidden text-center">
+            Progresso: <span id="progress-text">0%</span>
+        </div>
+
+        <canvas id="canvas" class="hidden"></canvas>
+        <video id="video-player" class="hidden" muted playsinline></video>
+    </div>
+
+    <script>
+        const input = document.getElementById('video-input');
+        const btn = document.getElementById('process-btn');
+        const status = document.getElementById('status');
+        const progressText = document.getElementById('progress-text');
+        const video = document.getElementById('video-player');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        let videoFile = null;
+
+        input.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                videoFile = e.target.files[0];
+                btn.disabled = false;
+                btn.className = "w-full bg-stone-900 text-white py-3 rounded-xl font-medium hover:bg-stone-800 transition-colors cursor-pointer";
+            }
+        });
+
+        btn.addEventListener('click', async () => {
+            if (!videoFile) return;
+
+            btn.disabled = true;
+            btn.innerText = "Processando (Aguarde)...";
+            status.classList.remove('hidden');
+
+            const url = URL.createObjectURL(videoFile);
+            video.src = url;
+
+            await new Promise(r => video.addEventListener('loadedmetadata', r, { once: true }));
+            
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            
+            const zip = new JSZip();
+            const fps = 30;
+            const totalFrames = Math.floor(video.duration * fps) - 1;
+
+            for (let i = 0; i <= totalFrames; i++) {
+                video.currentTime = i / fps;
+                
+                await new Promise(resolve => {
+                    const handler = () => {
+                        video.removeEventListener('seeked', handler);
+                        resolve();
+                    };
+                    video.addEventListener('seeked', handler);
+                });
+
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                
+                const dataUrl = canvas.toDataURL('image/webp', 0.8);
+                const base64Data = dataUrl.replace(/^data:image\/webp;base64,/, "");
+                
+                // Nome com zeros à esquerda
+                const frameName = `frame-${i.toString().padStart(3, '0')}.webp`;
+                zip.file(frameName, base64Data, {base64: true});
+
+                progressText.innerText = `${Math.round((i / totalFrames) * 100)}%`;
+            }
+
+            progressText.innerText = "Compactando ZIP...";
+
+            const content = await zip.generateAsync({type:"blob"});
+            const downloadUrl = URL.createObjectURL(content);
+
+            const a = document.createElement("a");
+            a.href = downloadUrl;
+            a.download = "glasses_sequence.zip";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+
+            btn.innerText = "Concluído!";
+            progressText.innerText = "Download iniciado! Extraia as imagens na pasta assets.";
+        });
+    </script>
+</body>
+</html>
